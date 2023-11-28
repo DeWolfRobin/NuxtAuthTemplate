@@ -20,6 +20,10 @@ export class UserEntity implements users {
   @Exclude()
   password: string;
 
+  @ApiProperty()
+  @Exclude()
+  refreshToken: string;
+
   @ApiProperty({ required: false, default: true })
   admin: boolean = false;
 

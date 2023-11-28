@@ -25,6 +25,10 @@ export class CreateUserDto {
   @MinLength(12)
   password: string;
 
+  @ApiProperty({ required: false })
+  @IsString()
+  refreshToken: string;
+
   @ApiProperty({ required: false, default: false })
   @IsBoolean()
   @IsOptional()

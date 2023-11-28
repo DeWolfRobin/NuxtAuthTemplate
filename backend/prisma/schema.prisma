@@ -11,11 +11,12 @@ datasource db {
 }
 
 model users {
-  id         String   @id @default(cuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  email      String   @unique(map: "email")
-  name       String   @unique(map: "name")
-  password   String
-  admin      Boolean  @default(false)
+  id           String   @id @default(cuid())
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  email        String   @unique(map: "email")
+  name         String   @unique(map: "name")
+  password     String
+  refreshToken String?
+  admin        Boolean  @default(false)
 }
