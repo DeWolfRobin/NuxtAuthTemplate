@@ -8,7 +8,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthEntity } from './entity/auth.entity';
 import { LoginDto } from './dto/login.dto';
 import { SignUpUser } from 'src/users/dto/signup-user.dto';
@@ -27,11 +27,11 @@ export class AuthController {
   }
 
   @UseGuards(RefreshTokenGuard)
+  @ApiBearerAuth()
   @Get('refresh')
   refreshTokens(@Request() req: any) {
     const userId = req.user.id;
-    const refreshToken = req.user['refreshToken'];
-    Logger.log(req.user);
+    const refreshToken = req.user.refreshToken;
     return this.authService.refreshTokens(userId, refreshToken);
   }
 
@@ -41,9 +41,9 @@ export class AuthController {
   }
 
   @Get('logout')
-  //@UseGuards(AccessTokenGuard)
+  @ApiBearerAuth()
+  @UseGuards(AccessTokenGuard)
   logout(@Request() req: any) {
-    Logger.log(req.payload);
     this.authService.logout(req.user.id);
   }
 }

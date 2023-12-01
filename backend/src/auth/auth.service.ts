@@ -4,6 +4,7 @@ import {
   UnauthorizedException,
   BadRequestException,
   ForbiddenException,
+  Logger,
 } from '@nestjs/common';
 import { PrismaService } from './../prisma/prisma.service';
 import { SignUpUser } from 'src/users/dto/signup-user.dto';
@@ -21,6 +22,7 @@ export class AuthService {
   ) {}
 
   async refreshTokens(userId: string, refreshToken: string) {
+    Logger.log(userId);
     const user = await this.usersService.findOne(userId);
     if (!user || !user.refreshToken)
       throw new ForbiddenException('Access Denied');
@@ -93,14 +95,14 @@ export class AuthService {
   async getTokens(userId: string) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
-        { sub: userId },
+        { userId: userId },
         {
           secret: process.env.JWT_ACCESS_SECRET,
           expiresIn: '15m',
         },
       ),
       this.jwtService.signAsync(
-        { sub: userId },
+        { userId: userId },
         {
           secret: process.env.JWT_REFRESH_SECRET,
           expiresIn: '7d',
